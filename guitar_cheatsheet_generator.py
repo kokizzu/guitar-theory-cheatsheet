@@ -510,25 +510,10 @@ def create_svg(width: int, height: int, svg_path: Path) -> None:
 
         inner_x = right_x + right_w * 0.020
         inner_w = right_w * 0.960
-        label_h = scale_panel_h * 0.14
-        board_y = py + title_bar_h + label_h
-        board_h = scale_panel_h - title_bar_h - label_h - scale_panel_h * 0.060
+        top_gap = scale_panel_h * 0.035
+        board_y = py + title_bar_h + top_gap
+        board_h = scale_panel_h - title_bar_h - top_gap - scale_panel_h * 0.060
 
-        label_pad = 17
-        grid_x = inner_x + label_pad
-        grid_w = inner_w - label_pad
-        fret_count = SCALE_SPAN.fret_end - SCALE_SPAN.fret_start + 1
-        fret_cell = grid_w / fret_count
-        label_y = py + title_bar_h + label_h * 0.68
-        for position in SCALE_POSITIONS:
-            position_x = grid_x + (position.fret_start - SCALE_SPAN.fret_start) * fret_cell
-            add_line(dwg, position_x, board_y - label_h * 0.28,
-                     position_x, board_y + board_h,
-                     stroke=GRID_DIM, stroke_width=0.9, opacity=0.85)
-            add_text(dwg, position_x + fret_cell * 0.06, label_y,
-                     f"Position {position.position_number} ({position.shape})",
-                     size=label_h * 0.43, fill=TEXT_MUTED,
-                     weight="bold", anchor="start", family=FONT_CONDENSED)
         notes = chord_notes_for_window(SCALE_SPAN, scale)
         draw_fretboard(dwg, inner_x, board_y, inner_w, board_h,
                        SCALE_SPAN, notes,
