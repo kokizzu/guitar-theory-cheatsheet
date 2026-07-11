@@ -19,7 +19,7 @@ Open the [SVG preview](guitar_theory_cheatsheet_programmatic.svg) for the scalab
 The poster is a movable interval map. C is used only as the drawing reference, so the same shapes can be moved to any root.
 
 - The left side shows the CAGED chord shapes and arpeggios across the C, A, G, E, and D shape positions.
-- The right side shows scale patterns across five connected CAGED positions.
+- The right side shows each scale or mode on one continuous fretboard across the connected CAGED cycle: G, E, D, C, A, then back to G.
 - Fretboards are drawn with string 1, high E, on top and string 6, low E, on the bottom.
 - Each colored note is labeled by interval function: `R`, `2`, `b3`, `3`, `4`, `b5`, `5`, `b6`, `6`, `b7`, `7`, or `bb7`.
 
@@ -100,5 +100,14 @@ The poster shows a full diminished 7 arpeggio, `R b3 b5 bb7`. The diatonic seven
 - `guitar_theory_cheatsheet_programmatic_1920x1080.png`: lower-resolution preview PNG
 - `guitar_theory_cheatsheet_programmatic_3840x2160.png`: high-resolution PNG
 - `guitar_cheatsheet_programmatic_bundle.zip`: bundled source, SVG, and PNG outputs
+
+## Build
+
+Use the Makefile targets, which delegate to `scripts/generate-cheatsheet.sh`:
+
+```bash
+make deps
+make all
+```
 
 The generated files and Python source are committed directly to this repository.

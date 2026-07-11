@@ -59,7 +59,24 @@ POSITIONS: Mapping[str, Position] = {
 }
 
 LEFT_ROW_ORDER: Tuple[str, ...] = ("C", "A", "G", "E", "D")
-SCALE_POSITION_ORDER: Tuple[str, ...] = ("E", "D", "C", "A", "G")
+
+# The right-side mode/scale strip follows the CAGED cycle from the lower
+# G-shape position and stops when it returns to G. It intentionally does not
+# continue to the next E shape above fret 20.
+SCALE_POSITIONS: Tuple[Position, ...] = (
+    Position("G", 1, 4, 8),
+    Position("E", 2, 7, 11),
+    Position("D", 3, 9, 13),
+    Position("C", 4, 12, 16),
+    Position("A", 5, 14, 18),
+    Position("G", 6, 16, 20),
+)
+SCALE_SPAN = Position(
+    "Scale",
+    0,
+    min(p.fret_start for p in SCALE_POSITIONS),
+    max(p.fret_end for p in SCALE_POSITIONS),
+)
 
 # Explicit major-chord CAGED voicings for C major. Keys are string numbers
 # (1=high E at top, 6=low E at bottom); values are absolute fret numbers.
@@ -493,24 +510,29 @@ def create_svg(width: int, height: int, svg_path: Path) -> None:
 
         inner_x = right_x + right_w * 0.020
         inner_w = right_w * 0.960
-        mini_gap = right_w * 0.010
-        mini_w = (inner_w - mini_gap * 4) / 5
-        label_h = scale_panel_h * 0.11
+        label_h = scale_panel_h * 0.14
         board_y = py + title_bar_h + label_h
         board_h = scale_panel_h - title_bar_h - label_h - scale_panel_h * 0.060
 
-        for pos_idx, shape in enumerate(SCALE_POSITION_ORDER):
-            position = POSITIONS[shape]
-            mx = inner_x + pos_idx * (mini_w + mini_gap)
-            add_text(dwg, mx + mini_w / 2,
-                     py + title_bar_h + label_h * 0.72,
-                     f"Position {position.position_number} ({shape})",
-                     size=label_h * 0.39, fill=TEXT_MUTED,
-                     weight="bold", anchor="middle", family=FONT_CONDENSED)
-            notes = chord_notes_for_window(position, scale)
-            draw_fretboard(dwg, mx, board_y, mini_w, board_h,
-                           position, notes,
-                           show_orientation_labels=(pos_idx == 0), compact=True)
+        label_pad = 17
+        grid_x = inner_x + label_pad
+        grid_w = inner_w - label_pad
+        fret_count = SCALE_SPAN.fret_end - SCALE_SPAN.fret_start + 1
+        fret_cell = grid_w / fret_count
+        label_y = py + title_bar_h + label_h * 0.68
+        for position in SCALE_POSITIONS:
+            position_x = grid_x + (position.fret_start - SCALE_SPAN.fret_start) * fret_cell
+            add_line(dwg, position_x, board_y - label_h * 0.28,
+                     position_x, board_y + board_h,
+                     stroke=GRID_DIM, stroke_width=0.9, opacity=0.85)
+            add_text(dwg, position_x + fret_cell * 0.06, label_y,
+                     f"Position {position.position_number} ({position.shape})",
+                     size=label_h * 0.43, fill=TEXT_MUTED,
+                     weight="bold", anchor="start", family=FONT_CONDENSED)
+        notes = chord_notes_for_window(SCALE_SPAN, scale)
+        draw_fretboard(dwg, inner_x, board_y, inner_w, board_h,
+                       SCALE_SPAN, notes,
+                       show_orientation_labels=True, compact=True)
 
     # ------------------------------ Bottom legend ----------------------------
     legend_y = height - legend_h - margin * 0.45
