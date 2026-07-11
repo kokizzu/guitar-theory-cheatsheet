@@ -9,7 +9,7 @@ Orientation used everywhere:
     string 6 (low E)  = bottom horizontal string
     frets increase from left to right
 
-Default output is 3840x2160 (2x Full HD). A 1920x1080 preview is also
+Default output is 3840x2160 (2x Full HD). A half-size preview is also
 created unless --no-preview is passed.
 """
 
@@ -124,6 +124,14 @@ SCALES: Tuple[Formula, ...] = (
     Formula("Minor Pentatonic Scale", ((0, "R"), (3, "b3"), (5, "4"), (7, "5"), (10, "b7"))),
     Formula("Major Blues Scale", ((0, "R"), (2, "2"), (3, "b3"), (4, "3"), (7, "5"), (9, "6"))),
     Formula("Minor Blues Scale", ((0, "R"), (3, "b3"), (5, "4"), (6, "b5"), (7, "5"), (10, "b7"))),
+)
+MAJOR_SCALE_TITLES = {
+    "Ionian Mode (Major Scale)",
+    "Major Pentatonic Scale",
+    "Major Blues Scale",
+}
+MAJOR_SCALES: Tuple[Formula, ...] = tuple(
+    scale for scale in SCALES if scale.title in MAJOR_SCALE_TITLES
 )
 
 # Rainbow system requested by the user. Flattened intervals stay in the same
@@ -364,9 +372,11 @@ def draw_panel_border(dwg: svgwrite.Drawing, x: float, y: float, w: float, h: fl
 # -----------------------------------------------------------------------------
 
 
-def create_svg(width: int, height: int, svg_path: Path) -> None:
-    if abs(width / height - 16 / 9) > 0.015:
-        raise ValueError("This layout is designed for a 16:9 canvas.")
+def create_svg(width: int, height: int, svg_path: Path,
+               scales: Sequence[Formula] = SCALES) -> None:
+    ratio = width / height
+    if not (abs(ratio - 16 / 9) <= 0.015 or abs(ratio - 8 / 3) <= 0.015):
+        raise ValueError("This layout is designed for a 16:9 or 8:3 canvas.")
 
     validate_music_data()
 
@@ -480,9 +490,9 @@ def create_svg(width: int, height: int, svg_path: Path) -> None:
 
     # ----------------------------- Right scales ------------------------------
     panel_gap = content_h * 0.010
-    scale_panel_h = (content_h - panel_gap * (len(SCALES) - 1)) / len(SCALES)
+    scale_panel_h = (content_h - panel_gap * (len(scales) - 1)) / len(scales)
 
-    for idx, scale in enumerate(SCALES):
+    for idx, scale in enumerate(scales):
         py = content_y + idx * (scale_panel_h + panel_gap)
         draw_panel_border(dwg, right_x, py, right_w, scale_panel_h, radius=10)
         title_bar_h = scale_panel_h * 0.245
@@ -558,18 +568,21 @@ def create_svg(width: int, height: int, svg_path: Path) -> None:
 
 
 def render_outputs(width: int, height: int, out_dir: Path,
-                   stem: str, make_preview: bool = True) -> Tuple[Path, Path, Path | None]:
+                   stem: str, make_preview: bool = True,
+                   scales: Sequence[Formula] = SCALES) -> Tuple[Path, Path, Path | None]:
     out_dir.mkdir(parents=True, exist_ok=True)
     svg_path = out_dir / f"{stem}.svg"
     png_path = out_dir / f"{stem}_{width}x{height}.png"
-    preview_path = out_dir / f"{stem}_1920x1080.png" if make_preview else None
+    preview_width = width // 2
+    preview_height = height // 2
+    preview_path = out_dir / f"{stem}_{preview_width}x{preview_height}.png" if make_preview else None
 
-    create_svg(width, height, svg_path)
+    create_svg(width, height, svg_path, scales=scales)
     cairosvg.svg2png(url=str(svg_path), write_to=str(png_path),
                      output_width=width, output_height=height)
     if make_preview and preview_path is not None:
         cairosvg.svg2png(url=str(svg_path), write_to=str(preview_path),
-                         output_width=1920, output_height=1080)
+                         output_width=preview_width, output_height=preview_height)
     return svg_path, png_path, preview_path
 
 
@@ -583,13 +596,17 @@ def main() -> None:
                         help="Output directory")
     parser.add_argument("--stem", default="guitar_theory_cheatsheet",
                         help="Base filename")
+    parser.add_argument("--scale-set", choices=("full", "major"), default="full",
+                        help="Scale rows to draw; default full")
     parser.add_argument("--no-preview", action="store_true",
-                        help="Do not create a 1920x1080 preview")
+                        help="Do not create a half-size preview")
     args = parser.parse_args()
 
+    scales = SCALES if args.scale_set == "full" else MAJOR_SCALES
     svg_path, png_path, preview_path = render_outputs(
         args.width, args.height, args.out_dir, args.stem,
         make_preview=not args.no_preview,
+        scales=scales,
     )
     print(f"SVG: {svg_path}")
     print(f"PNG: {png_path}")

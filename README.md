@@ -6,13 +6,21 @@ Programmatically drawn dark-mode guitar theory cheatsheet with:
 - CAGED and arpeggio diagrams
 - Ionian, Aeolian, pentatonic, and blues scale diagrams
 - Rainbow interval colors
-- SVG plus 1920×1080 and 3840×2160 PNG outputs
+- 16:9 and 8:3 SVG plus lower-resolution and high-resolution PNG outputs
 
 ## Preview
 
-[![Guitar theory cheatsheet preview](guitar_theory_cheatsheet_programmatic_1920x1080.png)](guitar_theory_cheatsheet_programmatic.svg)
+### 16:9
 
-Open the [SVG preview](guitar_theory_cheatsheet_programmatic.svg) for the scalable version.
+[![Guitar theory cheatsheet 16:9 preview](guitar_theory_cheatsheet_programmatic_ratio_16_9_1920x1080.png)](guitar_theory_cheatsheet_programmatic_ratio_16_9.svg)
+
+Open the [16:9 SVG](guitar_theory_cheatsheet_programmatic_ratio_16_9.svg) for the scalable version.
+
+### 8:3
+
+[![Guitar theory cheatsheet 8:3 preview](guitar_theory_cheatsheet_programmatic_ratio_8_3_1920x720.png)](guitar_theory_cheatsheet_programmatic_ratio_8_3.svg)
+
+Open the [8:3 SVG](guitar_theory_cheatsheet_programmatic_ratio_8_3.svg) for the scalable version.
 
 ## Poster Guide
 
@@ -20,6 +28,7 @@ The poster is a movable interval map. C is used only as the drawing reference, s
 
 - The left side shows the CAGED chord shapes and arpeggios across the C, A, G, E, and D shape positions.
 - The right side shows each scale or mode on one continuous fretboard across the connected CAGED cycle: G, E, D, C, A, then back to G.
+- The 16:9 poster includes all six scale rows. The 8:3 poster keeps only the major-family rows: Ionian, Major Pentatonic, and Major Blues.
 - Fretboards are drawn with string 1, high E, on top and string 6, low E, on the bottom.
 - Each colored note is labeled by interval function: `R`, `2`, `b3`, `3`, `4`, `b5`, `5`, `b6`, `6`, `b7`, `7`, or `bb7`.
 
@@ -96,10 +105,13 @@ The poster shows a full diminished 7 arpeggio, `R b3 b5 bb7`. The diatonic seven
 ## Output Files
 
 - `guitar_cheatsheet_generator.py`: source generator
-- `guitar_theory_cheatsheet_programmatic.svg`: scalable vector output
-- `guitar_theory_cheatsheet_programmatic_1920x1080.png`: lower-resolution preview PNG
-- `guitar_theory_cheatsheet_programmatic_3840x2160.png`: high-resolution PNG
-- `guitar_cheatsheet_programmatic_bundle.zip`: bundled source, SVG, and PNG outputs
+- `guitar_theory_cheatsheet_programmatic_ratio_16_9.svg`: 16:9 scalable vector output
+- `guitar_theory_cheatsheet_programmatic_ratio_16_9_1920x1080.png`: 16:9 lower-resolution preview PNG
+- `guitar_theory_cheatsheet_programmatic_ratio_16_9_3840x2160.png`: 16:9 high-resolution PNG
+- `guitar_theory_cheatsheet_programmatic_ratio_8_3.svg`: 8:3 scalable vector output
+- `guitar_theory_cheatsheet_programmatic_ratio_8_3_1920x720.png`: 8:3 lower-resolution preview PNG
+- `guitar_theory_cheatsheet_programmatic_ratio_8_3_3840x1440.png`: 8:3 high-resolution PNG
+- `guitar_cheatsheet_programmatic_bundle.zip`: bundled source, SVG, and PNG outputs for both ratios
 
 ## Build
 
