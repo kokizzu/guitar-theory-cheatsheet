@@ -72,6 +72,27 @@ Scale step formulas are measured from one note to the next up to the octave. `1`
 | Major blues scale | `R 2 b3 3 5 6` | `1-1/2-1/2-1 1/2-1-1 1/2` |
 | Minor blues scale | `R b3 4 b5 5 b7` | `1 1/2-1-1/2-1/2-1 1/2-1` |
 
+## When To Use The Chords
+
+Major 7 and minor 7 chords can often sit as stable colors. Dominant 7, diminished, and diminished 7 chords usually create tension and point toward another chord.
+
+| Chord type | Formula | Common use | Example in C |
+| --- | --- | --- | --- |
+| Diminished triad | `R b3 b5` | Unstable leading-tone chord that pulls into a target chord. | `Bdim -> C` |
+| Major 7 | `R 3 5 7` | Smooth major color, often used for tonic `I` or subdominant `IV` chords. | `Cmaj7`, `Fmaj7` |
+| Dominant 7 | `R 3 5 b7` | Strong resolution chord, usually moving down a fifth or up a fourth. | `G7 -> C`, `E7 -> Am` |
+| Minor 7 | `R b3 5 b7` | Softer minor color, common on `ii`, `iii`, and `vi` chords in a major key. | `Dm7`, `Em7`, `Am7` |
+| Diminished 7 | `R b3 b5 bb7` | Strong passing or approach chord, often resolving up a half step. | `Bdim7 -> C`, `C#dim7 -> Dm` |
+
+In C major, the common diatonic seventh chords are:
+
+```text
+Cmaj7  Dm7  Em7  Fmaj7  G7  Am7  Bm7b5
+Imaj7  ii7  iii7 IVmaj7 V7  vi7  viiø7
+```
+
+The poster shows a full diminished 7 arpeggio, `R b3 b5 bb7`. The diatonic seventh chord on the seventh scale degree is half-diminished, also called `m7b5`, with formula `R b3 b5 b7`.
+
 ## Output Files
 
 - `guitar_cheatsheet_generator.py`: source generator
