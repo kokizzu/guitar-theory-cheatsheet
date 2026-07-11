@@ -8,4 +8,10 @@ Programmatically drawn dark-mode guitar theory cheatsheet with:
 - Rainbow interval colors
 - SVG plus 1920×1080 and 3840×2160 PNG outputs
 
+## Preview
+
+[![Guitar theory cheatsheet preview](guitar_theory_cheatsheet_programmatic_1920x1080.png)](guitar_theory_cheatsheet_programmatic.svg)
+
+Open the [SVG preview](guitar_theory_cheatsheet_programmatic.svg) for the scalable version.
+
 The generated files and Python source are committed directly to this repository.
